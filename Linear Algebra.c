@@ -14,7 +14,8 @@ int check(char *);
 void help();
 void main(){
 	 int x; int i, j;
-	 printf("The program solves linear equations in   variables ");gotoxy(39,0);scanf("%d",&x);
+	 printf("The program solves linear equations in   variables ");gotoxy(39,0);char X = getche();
+	 x = X-'0';printf("\n");
 	 if(x>MaxVar) {printf("Currently we solve only upto %d variable equations. See you later!",MaxVar);getch();return;}
      struct expression exp[x];
      for(i=0;i<x;i++) for(j=0;j<x+1;j++){
@@ -23,7 +24,7 @@ void main(){
 	 }
 	 char e[80];
      for(i=0;i<x;i++){
-         l: printf("Please enter the equation number %d \n",i+1);
+         l: printf("Please enter the expression number %d \n",i+1);
   		 do{ fflush(stdin);gets(e); }while(e[0]=='\0');
 		 if(!strcmp(e,"help")||!strcmp(e,"docs")) { help(); i=0; goto l;} 
 		 if(!check(e)) {printf("Something's not right. Try some other representation or type 'help'(w/o quotes)\n"); goto l;}
@@ -90,23 +91,5 @@ int check( char *e){
 	return 1;
 }
 void help(){
-	printf("Hello! I take it as my shortcoming that you ever had to come here :(\n");
-	printf("Nevertheless, now that you are here, I assume that you typed something that was not accepted or wrongly interpreted\n");
-	printf("So from here, you have these options: \n");
-	printf("1. Type the equations the way I expect them to be. I expect that:\n");
-	printf("\ta) You type them in most natural way like you do when you write with hand\n");
-	printf("\t   What is more natural: -x+32y=1 or -x+32y-1=0 \n");
-	printf("\t           and           -x+32y=1 or -1*x+32*y=1 \n");
-	printf("\tSPOILER: The answer is the first one in both rows\n");
-	printf("\tb) You are mentally fit\n");
-	printf("\t   Is it too much to ask? The title says \"Linear Algebra\" loud and clear.Yet if you are like me, you'd be \n");
-	printf("\t   surprised to see how many people pester my precious little code with '^'s and '**'s'\n");
-	printf("\t   Please don't do that.\n");
-	printf("*Exceptions:\nAs with every statement and every discipline(\"except\" perhaps mathematics), the current version of this program has\n");
-	printf("excptions regarding the 'natural' way. \nIn a three variable system, if say the coefficient of y is zero you may want to write x+3z=4 rather than x+0y+3z=4\n");
-	printf("but you shall have to write the latter one. On similar lines, flexiblity in order of variable has not yet been achieved\n");
-	printf("\n2. Leave feedback\n");
-	printf("\tI don't know if it makes you happy or sad hopefully not angry, but as you have been reading \n\ttill now you deserve to know that your inputs are already under surveillance");
-	printf("Still, you may\n\ttype 'feedback' to leave feedback.\n");
-	printf("\n3. Wolfram\n\tIn case you have given up hopes on me, methods better than mine already exist.\n\n");	
+	 FILE *help; help=fopen("README.md","r"); char ch = getc(help);while(ch!=EOF){printf("%c",ch); ch=getc(help);	}printf("\n\n");
 }
