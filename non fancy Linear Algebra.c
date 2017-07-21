@@ -66,7 +66,7 @@ void transpose(int n, float arr[][n], float trans[][n])
 	trans[i][j] = arr[j][i];
 }
 void adjoint(int n, float arr[][n], float adj[][n])
-{
+{	if(n==1){adj[0][0]=1; return;}
 	float temp[n][n], Minor[n-1][n-1];
 	int i, j;
 	for(i=0;i<n;i++)
@@ -78,40 +78,34 @@ void adjoint(int n, float arr[][n], float adj[][n])
 	temp[i][j]=determinant(n-1,Minor);}
 	transpose(n, temp, adj);
 }
-void inverse(int n, float arr[][n], float inv[][n]) //Added later. Was made specially for the "non fancy linear algebra"
+void inverse(int n, float arr[][n], float inv[][n], float *det)
 {
 	float adj[n][n];
 	adjoint(n, arr, adj);
-	float det = determinant(n, arr);
-	if(det!=0)
-	multiplybyscalar(n, adj, 1/det, inv);	
+	*det = determinant(n, arr);
+	if((*det)!=0)
+	multiplybyscalar(n, adj, 1/(*det), inv);	
 }
 main()
-{
-	int AA;
-	printf("Enter length of the square matrix ");
-	scanf("%d", &AA);
-	const int n = AA;
-	float arr[n][n], adj[n][n], inv[n][n], product[n][n];
+{	
 	int i, j;
+	int n;
+	printf("Number of variables: ");
+	scanf("%d",&n);
+	float matrix[n][n+1], arr[n][n], val[n][1], sol[n][1];
 	for(i=0;i<n;i++)
-	for(j=0;j<n;j++)
-	scanf("%f",&arr[i][j]);
-	float det = determinant(n, arr);
-	printf("\nDeterminant = %.2f", det);
-	adjoint(n, arr, adj);
-	printf("\n\nThe adjoint is:");
-	show(n, adj);
-	if(det==0)
-	{printf("\nInverse doesn't exist\n");return;}
-	
-	printf("\nThe Inverse is:");
-	multiplybyscalar(n, adj, 1/det, inv);
-	show(n, inv);
-
-	multiply(n, n, arr, n, n, inv, product);
-	printf("\nThe product A*inverseA is:");
-	show(n, product);
-	printf("\nThis above matrix is supposed to be an identity matrix\n");
+	{for(j=0;j<n+1;j++)
+	{scanf("%f",&matrix[i][j]);
+	if(j<n) arr[i][j] = matrix[i][j];
+	else val[i][0] = matrix[i][n];}}
+	float inv[n][n], det;
+	inverse(n, arr, inv, &det);
+	if(det!=0)
+	multiply(n, n, inv, n, 1, val, sol);
+	else 
+	{printf("Multiple* solutions. . so unable to find any lol\n*or maybe none");
+	return;}
+	for(i=0;i<n;i++)
+	printf("%0.2f ", sol[i][0]);
 	getch();
 }
